@@ -1,6 +1,6 @@
 # UI MODEL
 
-![]('UI MODELS'/catagories.jpg)
+![](UI MODELS\catagories.jpg)
 ![]('UI MODELS'/contact.jpg)
 ![]('UI MODELS'/expense.jpg)
 ![]('UI MODELS'/home.jpg)
