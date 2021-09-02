@@ -1,4 +1,8 @@
+import 'package:demoz_client/auth/register/bloc/register_bloc.dart';
+import 'package:demoz_client/auth/register/bloc/register_event.dart';
+import 'package:demoz_client/auth/register/bloc/register_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterScreen extends StatelessWidget {
   static const String routeName = '/register';
@@ -7,6 +11,9 @@ class RegisterScreen extends StatelessWidget {
 
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
+  final confirmPasswordTextController = TextEditingController();
+  final fnameTextController = TextEditingController();
+  final lnameTextController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 
@@ -34,7 +41,7 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 25.0),
                 TextFormField(
-                  controller: emailTextController,
+                  controller: fnameTextController,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.person),
                     fillColor: Colors.white,
@@ -47,9 +54,9 @@ class RegisterScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                   ),
-                  validator: (String? email) {
-                    if (!email!.contains('@')) {
-                      return "Invalid email";
+                  validator: (String? fname) {
+                    if (fname!.isEmpty) {
+                      return "Enter Name";
                     }
 
                     return null;
@@ -57,8 +64,7 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 25.0),
                 TextFormField(
-                  obscureText: true,
-                  controller: passwordTextController,
+                  controller: lnameTextController,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.person),
                     fillColor: Colors.white,
@@ -68,9 +74,9 @@ class RegisterScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                   ),
-                  validator: (String? password) {
-                    if (password!.length < 8) {
-                      return "Password too short";
+                  validator: (String? lname) {
+                    if (lname!.isEmpty) {
+                      return "Enter Last Name";
                     }
 
                     return null;
@@ -123,7 +129,7 @@ class RegisterScreen extends StatelessWidget {
                 SizedBox(height: 25.0),
                 TextFormField(
                   obscureText: true,
-                  controller: passwordTextController,
+                  controller: confirmPasswordTextController,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.lock),
                     fillColor: Colors.white,
@@ -134,46 +140,85 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                   validator: (String? password) {
-                    if (password!.length < 8) {
-                      return "Password too short";
+                    if (password != passwordTextController.text) {
+                      return "Password Doesn't Match";
                     }
 
                     return null;
                   },
                 ),
                 SizedBox(height: 80.0),
-                GestureDetector(
-                  onTap: () {
-                    // run validations.
-                    // form access.
-                    final valid = formKey.currentState!.validate();
-                    if (!valid) {
-                      // do something here.
-                      print("something failed");
-                      return;
+                BlocConsumer<RegisterBloc, AuthState>(
+                  listener: (context, state) {
+                    if (state is AuthFailed) {
+                      final msg = state.errorMsg;
+                      final snackBar = SnackBar(
+                        content: Text(msg),
+                        duration: Duration(
+                          seconds: 5,
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
-
-                    final email = emailTextController.text;
-                    final pass = passwordTextController.text;
-                    print("all went well");
-                    // print("email:: $email  pass:: $pass");
+                    if (state is Registered) {
+                      final snackBar = SnackBar(
+                        content: Text("Registered Successfully"),
+                        backgroundColor: Colors.green,
+                        duration: Duration(seconds: 5),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
                   },
-                  child: Container(
-                    height: 60.0,
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                    child: Text(
-                      "Sign Up",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
+                  builder: (context, state) {
+                    if (state is RegisterInprogress) {
+                      return CircularProgressIndicator();
+                    }
+                    return GestureDetector(
+                      onTap: () {
+                        // run validations.
+                        // form access.
+                        final valid = formKey.currentState!.validate();
+                        if (!valid) {
+                          // do something here.
+                          print("something failed");
+                          return;
+                        }
+
+                        final email = emailTextController.text;
+                        final pass = passwordTextController.text;
+                        final confirmPass = confirmPasswordTextController.text;
+                        final fname = fnameTextController.text;
+                        final lname = lnameTextController.text;
+
+                        final registerBloc =
+                            BlocProvider.of<RegisterBloc>(context);
+                        registerBloc.add(RegisterEvent(
+                            email: email,
+                            password: pass,
+                            confirmPassword: confirmPass,
+                            fname: fname,
+                            lname: lname));
+                        print("all went well");
+                        // print("email::   pass:: ");
+                      },
+                      child: Container(
+                        height: 60.0,
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        child: Text(
+                          "Sign Up",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

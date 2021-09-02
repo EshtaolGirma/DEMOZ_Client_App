@@ -1,19 +1,15 @@
+import 'package:demoz_client/auth/login/bloc/login_bloc.dart';
+import 'package:demoz_client/auth/login/bloc/login_event.dart';
+import 'package:demoz_client/auth/login/bloc/login_state.dart';
 import 'package:demoz_client/auth/register/screens/registerScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/login',
-      theme: new ThemeData(scaffoldBackgroundColor: const Color(0xff66ffc7)),
-      routes: {
-        '/login' : (context) => LoginScreen(),
-        '/register' : (context) => RegisterScreen(),
-      },
-    );
+    return LoginScreen();
   }
 }
 
@@ -88,43 +84,63 @@ class LoginScreen extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: 120.0),
-                GestureDetector(
-                  onTap: () {
-                    // run validations.
-                    // form access.
-                    final valid = formKey.currentState!.validate();
-                    if (!valid) {
-                      // do something here.
-                      print("something failed");
-                      return;
+                BlocConsumer<LoginBloc, AuthState>(
+                  listener: (context, state) {
+                    if (state is LoggedIn) {
+                      // Navigator.of(context).pushNamed('routeName');
+                    }
+                    if (state is AuthFailed) {
+                      final msg = state.errorMsg;
+                      final snackBar = SnackBar(
+                        content: Text(msg),
+                        duration: Duration(
+                          seconds: 5,
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is LoginInprogress) {
+                      return CircularProgressIndicator();
                     }
 
-                    final email = emailTextController.text;
-                    final pass = passwordTextController.text;
-                    print("all went well");
-                    // print("email:: $email  pass:: $pass");
+                    return GestureDetector(
+                      onTap: () {
+                        // run validations.
+                        // form access.
+                        final valid = formKey.currentState!.validate();
+                        if (!valid) {
+                          // do something here.
+                          print("something failed");
+                          return;
+                        } //ii
+
+                        final email = emailTextController.text;
+                        final pass = passwordTextController.text;
+                        print("all went well");
+                        final loginBloc = BlocProvider.of<LoginBloc>(context);
+                        loginBloc.add(LoginEvent(email: email, password: pass));
+                        // print("email::   pass:: ");
+                      },
+                      child: Container(
+                        height: 60.0,
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        child: Text(
+                          "Log in",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    );
                   },
-                  child: GestureDetector(
-                    onTap: () {
-                      //  print('clicked'); // action here
-                    },
-                    child: Container(
-                      height: 60.0,
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      child: Text(
-                        "Log in",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 30.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
                 ),
                 SizedBox(height: 15.0),
                 TextButton(

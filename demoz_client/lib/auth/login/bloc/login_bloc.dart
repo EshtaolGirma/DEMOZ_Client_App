@@ -4,8 +4,8 @@ import 'package:demoz_client/auth/login/bloc/login_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
-class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc() : super(LoggedOut());
+class LoginBloc extends Bloc<AuthEvent, AuthState> {
+  LoginBloc() : super(LoggedOut());
 
   @override
   Stream<AuthState> mapEventToState(AuthEvent event) async* {
@@ -18,7 +18,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await Future.delayed(Duration(seconds: 2));
 
       if (email == "hello@world.com") {
-        if (password == "123456") {
+        if (password == "12345678") {
           // login successfuly
           yield LoggedIn();
         } else {
