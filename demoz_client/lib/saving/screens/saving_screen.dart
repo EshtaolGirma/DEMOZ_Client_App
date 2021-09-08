@@ -1,6 +1,9 @@
 // import 'package:demoz_client/navigation_bar/navigation_bar.dart';
+import 'package:demoz_client/saving/bloc/saving_bloc.dart';
+import 'package:demoz_client/saving/bloc/saving_state.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SavingScreen extends StatelessWidget {
   const SavingScreen({Key? key}) : super(key: key);
@@ -56,13 +59,29 @@ Widget _savingPageTitleBuilder() {
 }
 
 Widget _savingListBuilder() {
-  return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: 3,
-      itemBuilder: (BuildContext cxt, index) {
-        return _savingPlanCardBuilder();
-      });
+  return BlocConsumer<SavingBloc, SavingState>(
+    listener: (context, state) {
+      // TODO: implement listener
+    },
+    builder: (context, state) {
+      if (state is SavingPlanLoaded) {
+        return ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: 3,
+            itemBuilder: (BuildContext cxt, index) {
+              return _savingPlanCardBuilder();
+            });
+      }
+      return Container(
+        height: 400.0,
+        child: Center(
+            child: CircularProgressIndicator(
+          color: const Color(0xff66ffc7),
+        )),
+      );
+    },
+  );
 }
 
 Widget _savingPlanCardBuilder() {
