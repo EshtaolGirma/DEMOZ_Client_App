@@ -2,8 +2,8 @@
 // we created separated repo for the back end and front end. https://github.com/EshtaolGirma/DEMOZ_API
 Our project is monthly expense managing app what we chose to name it "Demoz" app.
 
-The app is aimed to be used for properly using a monthly income, by providing a mechanism to record and have quick acces to view all income and expenses. it also provide a better way to manage bills with a reminder to when the next payment date is, by calculating it based on the frequency of days inputted by the user. The app motivate to having a saving plan and following it through the plan by showing how many days and moeny left to reach the user goals. And When it comes to debt and loans it recordes who is the loaner and borrower and the amount of cash involved nad the date the deal was made.
-A user must first register or (login if they has an account already existing) they to have acces to freatures of the app provides.
+The app is aimed to be used for properly using a monthly income, by providing a mechanism to record and have quick acces to view all income and expenses. it also provide a better way to manage bills with a reminder to when the next payment date is, by calculating it based on the frequency of days inputted by the user. The app motivate to having a saving plan and following it through the plan by showing how many days and money left to reach the user goals. And When it comes to debt and loans it recordes who is the loaner and borrower and the amount of cash involved and the date the deal was made.
+A user must first register or (login if they has an account already existing) they to have acces to features of the app provides.
 It uses Flutter is an open-source UI software development kit, and Bloc for state management.
 
 
