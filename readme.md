@@ -1,4 +1,4 @@
-# AMP Project: Demoz Fullter App
+# AMP Project: Demoz Flutter App
 // we created separated repo for the back end and front end. https://github.com/EshtaolGirma/DEMOZ_API
 Our project is monthly expense managing app what we chose to name it "Demoz" app.
 
