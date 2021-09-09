@@ -115,18 +115,17 @@ class SavingDetailModel extends Equatable {
 class SavingDepositModel extends Equatable {
   final double amount;
   final DateTime deposit_day;
-  final int id;
+  final String desc;
 
   SavingDepositModel({
     required this.amount,
     required this.deposit_day,
-    required this.id,
+    required this.desc,
   });
 
   @override
-  // TODO: implement props
   List<Object?> get props => [
-        id,
+        desc,
         amount,
         deposit_day,
       ];
@@ -134,7 +133,7 @@ class SavingDepositModel extends Equatable {
   factory SavingDepositModel.fromJson(Map<String, dynamic> json) {
     DateFormat inputFormat = DateFormat('yyyy-MM-dd');
     return SavingDepositModel(
-      id: json['id'],
+      desc: json['description'],
       amount: json['Deposited Amount'],
       deposit_day: inputFormat.parse(json['Deposit Date'][2].toString() +
           '-' +

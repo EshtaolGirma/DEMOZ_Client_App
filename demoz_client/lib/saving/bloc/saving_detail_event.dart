@@ -47,3 +47,27 @@ class RefershPage extends SavingDetailEvent {
 
   RefershPage(this.id);
 }
+
+class AddDeposit extends SavingDetailEvent {
+  final int id;
+  final double amount;
+  final DateTime date;
+  final String desc;
+
+  AddDeposit({
+    required this.id,
+    required this.amount,
+    required this.date,
+    required this.desc,
+  });
+}
+
+abstract class SavingDepositEvent {}
+
+class EditDeposit extends SavingDepositEvent {}
+
+class DeleteDeposit extends SavingDepositEvent {
+  final int id;
+
+  DeleteDeposit(this.id);
+}

@@ -12,8 +12,8 @@ import 'package:intl/intl.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class SavingDetailScreen extends StatelessWidget {
-  // final int id;
-  SavingDetailScreen({Key? key}) : super(key: key);
+  final int id;
+  SavingDetailScreen({Key? key, required this.id}) : super(key: key);
 
   DateTime today = new DateTime.now();
   late String title_value;
@@ -25,7 +25,12 @@ class SavingDetailScreen extends StatelessWidget {
   late DateTime startDate_value;
   late DateTime endDate_value;
 
+  late double deposit_amount;
+  late DateTime deposit_date;
+  late String deposit_desc;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
+  final _formDepositKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,6 +41,7 @@ class SavingDetailScreen extends StatelessWidget {
   Widget _pageBuilder() {
     return SafeArea(
       child: Scaffold(
+        key: this._scaffoldKey,
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: PreferredSize(
@@ -45,14 +51,11 @@ class SavingDetailScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-            child: BlocConsumer<SavingDetailBloc, SavingDetailState>(
-              listener: (context, state) {
-                // TODO: implement listener
-              },
+            child: BlocBuilder<SavingDetailBloc, SavingDetailState>(
               builder: (context, state) {
                 print(state);
-                final savingDetialBloc =
-                    BlocProvider.of<SavingDetailBloc>(context);
+                // final savingDetialBloc =
+                //     BlocProvider.of<SavingDetailBloc>(context);
                 if (state is SavingDetailLoaded) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +73,7 @@ class SavingDetailScreen extends StatelessWidget {
                         height: 30,
                       ),
                       _savingPeogressBarBuilder(),
-                      _depsiteTitleBuilder(),
+                      _depsiteTitleBuilder(state.id),
                       _depositeList(),
                     ],
                   );
@@ -114,6 +117,7 @@ class SavingDetailScreen extends StatelessWidget {
                     ),
                   );
                 }
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -129,7 +133,7 @@ class SavingDetailScreen extends StatelessWidget {
                     SizedBox(
                       height: 30,
                     ),
-                    _depsiteTitleBuilder(),
+                    _depsiteTitleBuilder(1),
                     Container(
                       child: Center(
                         child: CircularProgressIndicator(),
@@ -185,7 +189,7 @@ class SavingDetailScreen extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        savingDetailBloc.add(SavingEditCancle(1));
+                        savingDetailBloc.add(SavingEditCancle(id));
                       },
                       child: Container(
                         width: 100.0,
@@ -296,8 +300,6 @@ class SavingDetailScreen extends StatelessWidget {
           String description = state.list[0].description;
           double deposit = state.list[0].amount;
           int frequency = state.list[0].frequency;
-          // DateTime startDate = state.list[0].startDate;
-          // DateTime endDate = state.list[0].endDate;
           return Container(
             margin: EdgeInsets.fromLTRB(40.0, 0.0, 0.0, 0.0),
             child: Column(
@@ -614,7 +616,7 @@ class SavingDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _depsiteTitleBuilder() {
+  Widget _depsiteTitleBuilder(int id) {
     return Container(
       margin: EdgeInsets.fromLTRB(22.0, 40.0, 15.0, 0.0),
       child: Column(
@@ -634,19 +636,8 @@ class SavingDetailScreen extends StatelessWidget {
                 SizedBox(
                   width: 15,
                 ),
-                _depositAddButtionBuilder(),
+                _depositAddButtionBuilder(id),
               ],
-            ),
-          ),
-          SizedBox(
-            height: 7,
-          ),
-          Text(
-            "Next deposit on 19 August, 2021",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w200,
-              color: Colors.black,
             ),
           ),
         ],
@@ -654,7 +645,7 @@ class SavingDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _depositAddButtionBuilder() {
+  Widget _depositAddButtionBuilder(int id) {
     return InkWell(
       child: Container(
         decoration: BoxDecoration(
@@ -685,7 +676,12 @@ class SavingDetailScreen extends StatelessWidget {
           ),
         ),
       ),
-      onTap: () {},
+      onTap: () {
+        this
+            ._scaffoldKey
+            .currentState
+            ?.showBottomSheet((ctx) => _buildBottomSheet(ctx, id));
+      },
     );
   }
 
@@ -693,7 +689,7 @@ class SavingDetailScreen extends StatelessWidget {
     return BlocBuilder<SavingDetailBloc, SavingDetailState>(
       builder: (context, state) {
         if (state is SavingDetailLoaded) {
-          return _depositsListBuilder(state.list[0].deposit);
+          return _depositsListBuilder(state.list[0].deposit, state.id);
         }
         return Container(
           width: 30,
@@ -704,70 +700,79 @@ class SavingDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _depositsListBuilder(List depositList) {
+  Widget _depositsListBuilder(List depositList, int id) {
     List<Widget> list = [];
     DateFormat inputFormat = DateFormat('yyyy-MM-dd');
     for (var i = 0; i < depositList.length; i++) {
-      print('fdsfsd');
       double amount = depositList[i]['Deposited Amount'].toDouble();
       String desc = depositList[i]['Description'];
 
       DateTime date = inputFormat.parse(
-          depositList[1]['Deposit Date'][2].toString() +
+          depositList[i]['Deposit Date'][2].toString() +
               '-' +
-              depositList[1]['Deposit Date'][1].toString() +
+              depositList[i]['Deposit Date'][1].toString() +
               '-' +
-              depositList[1]['Deposit Date'][0].toString());
-      list.add(_depositCardBuilder(amount, desc, date));
+              depositList[i]['Deposit Date'][0].toString());
+      list.add(_depositCardBuilder(amount, desc, date, id));
     }
     return Column(
       children: list,
     );
   }
 
-  Widget _depositCardBuilder(double amount, String description, DateTime date) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Card(
-          elevation: 1,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(
-              width: 2,
-              color: Color.fromRGBO(117, 243, 197, 1),
-            ),
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _dateDisplayBuilder(date),
-                      _depositeAmountDisplayBuilder(amount),
-                    ],
+  Widget _depositCardBuilder(
+      double amount, String description, DateTime date, int id) {
+    return BlocBuilder<SavingDetailBloc, SavingDetailState>(
+      builder: (context, state) {
+        if (state is SavingDetailLoaded) {
+          return InkWell(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Card(
+                elevation: 1,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    width: 2,
+                    color: Color.fromRGBO(117, 243, 197, 1),
                   ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 0.0),
-                        child: Text(
-                          "Note: ",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                          ),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _dateDisplayBuilder(date),
+                            _depositeAmountDisplayBuilder(amount),
+                          ],
                         ),
-                      ),
-                      _descriptionDisplayBuilder(description),
-                    ],
-                  )
-                ],
-              )),
-        ),
-      ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 0.0),
+                              child: Text(
+                                "Note: ",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ),
+                            _descriptionDisplayBuilder(description),
+                          ],
+                        )
+                      ],
+                    )),
+              ),
+            ),
+          );
+        }
+
+        return Container();
+      },
     );
   }
 
@@ -806,18 +811,6 @@ class SavingDetailScreen extends StatelessWidget {
   }
 
   Widget _descriptionDisplayBuilder(String desc) {
-    // return Container(
-    //   width: 200,
-    //   child: TextFormField(
-    //     maxLines: null,
-    //     textAlign: TextAlign.start,
-    //     enabled: false,
-    //     decoration: InputDecoration(
-    //       hintText: "Some note entered by user!Some note entered by user!",
-    //       border: InputBorder.none,
-    //     ),
-    //   ),
-    // );
     return Container(
       width: 250,
       child: Text(
@@ -1107,6 +1100,123 @@ class SavingDetailScreen extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Form _buildBottomSheet(BuildContext context, int id) {
+    print('building bottom sheet');
+
+    final bloc = BlocProvider.of<SavingDetailBloc>(context);
+    return Form(
+      key: _formDepositKey,
+      child: Container(
+        height: 500,
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.blue, width: 2.0),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: ListView(
+          children: <Widget>[
+            const ListTile(title: Text('ADD Deposit')),
+            TextFormField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                icon: Icon(Icons.attach_money),
+                labelText: 'Enter an integer',
+              ),
+              validator: (e) {
+                double x = double.parse(e!);
+                deposit_amount = x;
+              },
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                Icon(Icons.date_range),
+                SizedBox(
+                  width: 15,
+                ),
+                Container(
+                  width: 350,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black26),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: DateTimeFormField(
+                      initialValue: DateTime.now(),
+                      decoration: const InputDecoration(
+                        errorStyle: TextStyle(color: Colors.redAccent),
+                        border: InputBorder.none,
+                      ),
+                      mode: DateTimeFieldPickerMode.date,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (e) {
+                        deposit_date = e!;
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                icon: Icon(Icons.note_alt_outlined),
+                labelText: 'Description',
+              ),
+              validator: (e) {
+                deposit_desc = e!;
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  child: ElevatedButton.icon(
+                      icon: const Icon(Icons.save),
+                      label: const Text('Save'),
+                      onPressed: () => {
+                            if (_formDepositKey.currentState!.validate())
+                              {
+                                print(id),
+                                bloc.add(
+                                  AddDeposit(
+                                    id: id,
+                                    amount: deposit_amount,
+                                    date: deposit_date,
+                                    desc: deposit_desc,
+                                  ),
+                                ),
+                              },
+                            bloc.add(RefershPage(id)),
+                            Navigator.pop(context)
+                          }),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.cancel),
+                    label: const Text('close'),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                )
+              ],
+            )
+          ],
         ),
       ),
     );

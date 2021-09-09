@@ -20,5 +20,13 @@ class SavingDetailFailed extends SavingDetailState {
 class SavingDetailEditing extends SavingDetailState {
   final List list;
 
-  SavingDetailEditing(this.list); 
+  SavingDetailEditing(this.list);
 }
+
+abstract class SavingDepositState {}
+
+class DeletedDeposit extends SavingDepositState {}
+
+class EditingDeposit extends SavingDepositState {}
+
+class DepositIdel extends SavingDepositState {}

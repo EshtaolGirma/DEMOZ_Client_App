@@ -21,4 +21,8 @@ class SavingRepository {
   Future<List> createSavingPlan(SavingDetailModel save) async {
     return await savingDataProvider.createSavingPlan(save);
   }
+
+  Future<String> createDeposit(int id, SavingDepositModel depo) async {
+    return await savingDataProvider.createDeposit(id, depo);
+  }
 }

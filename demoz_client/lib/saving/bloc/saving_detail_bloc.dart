@@ -20,11 +20,13 @@ class SavingDetailBloc extends Bloc<SavingDetailEvent, SavingDetailState> {
     if (event is SavingDetailLoad) {
       yield SavingDetailLoading();
       final savings = await savingRepository.getSavingPlanDetails(event.id);
+
       yield SavingDetailLoaded(savings, event.id);
     }
     if (event is SavingEditCancle) {
       yield SavingDetailLoading();
       final savings = await savingRepository.getSavingPlanDetails(event.id);
+
       yield SavingDetailLoaded(savings, event.id);
     }
 
@@ -48,5 +50,20 @@ class SavingDetailBloc extends Bloc<SavingDetailEvent, SavingDetailState> {
       final savings = await savingRepository.getSavingPlanDetails(event.id);
       yield SavingDetailLoaded(savings, event.id);
     }
+
+    if (event is AddDeposit) {
+      print(event.id);
+      final deposit = SavingDepositModel(
+        amount: event.amount,
+        deposit_day: event.date,
+        desc: event.desc,
+      );
+      final result = await savingRepository.createDeposit(event.id, deposit);
+      print(result);
+    }
+
+    // if (event is DeleteDeposit) {
+    //   yield DeletedDeposit();
+    // }
   }
 }

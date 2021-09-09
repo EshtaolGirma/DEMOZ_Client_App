@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SavingScreen extends StatelessWidget {
+  static const String routeName = '/saving';
   SavingScreen({Key? key}) : super(key: key);
 
   @override
@@ -27,10 +28,10 @@ Widget _pageBuilder() {
   return SafeArea(
     child: Scaffold(
       backgroundColor: Colors.white,
-      // appBar: PreferredSize(
-      //   preferredSize: Size.fromHeight(80.0), // here the desired height
-      //   child: CustomAppBar(),
-      // ),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80.0), // here the desired height
+        child: CustomAppBar(),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
@@ -216,7 +217,7 @@ Widget _savingPlanCardBuilder({
         context,
         MaterialPageRoute(
           builder: (context) => SavingDetailScreen(
-            // id: id,
+            id: id,
           ),
         ),
       );
@@ -227,7 +228,6 @@ Widget _savingPlanCardBuilder({
 Widget _savingPlanAddButtonBuilder() {
   return BlocBuilder<SavingBloc, SavingState>(
     builder: (context, state) {
-      // final savingBLoc = BlocProvider.of<SavingBloc>(context);
       return InkWell(
         child: Container(
           width: double.infinity,

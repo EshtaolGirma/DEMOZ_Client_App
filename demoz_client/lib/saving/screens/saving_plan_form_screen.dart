@@ -396,6 +396,7 @@ class SavingPlanForm extends StatelessWidget {
               Container(
                 width: 150,
                 child: DateTimeFormField(
+                    initialValue: DateTime.now(),
                     decoration: const InputDecoration(
                       errorStyle: TextStyle(color: Colors.redAccent),
                       border: InputBorder.none,
@@ -430,6 +431,7 @@ class SavingPlanForm extends StatelessWidget {
               Container(
                 width: 150,
                 child: DateTimeFormField(
+                    initialValue: DateTime.now(),
                     decoration: const InputDecoration(
                       errorStyle: TextStyle(color: Colors.redAccent),
                       border: InputBorder.none,

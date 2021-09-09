@@ -91,10 +91,31 @@ class SavingDataProvider {
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
-      // return result['Plan']
-      //     .map((savingDetail) => SavingDetailModel.fromJson(savingDetail))
-      //     .toList();
       return [result];
+    } else {
+      throw Exception('Failed to load Saving Detail Plan');
+    }
+  }
+
+  Future<String> createDeposit(int id, SavingDepositModel depo) async {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String date = formatter.format(depo.deposit_day);
+
+    final response = await httpClient.post(
+      Uri.parse('$_baseUrl/transaction/$id/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        "deposited_amount": depo.amount,
+        "deposit_day": date,
+        "description": "${depo.desc}"
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body);
+      return '$result';
     } else {
       throw Exception('Failed to load Saving Detail Plan');
     }
