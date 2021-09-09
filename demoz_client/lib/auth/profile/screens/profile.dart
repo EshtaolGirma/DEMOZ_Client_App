@@ -1,7 +1,6 @@
-
-import 'package:demoz_client/profile/bloc/profile_bloc.dart';
-import 'package:demoz_client/profile/bloc/profile_event.dart';
-import 'package:demoz_client/profile/bloc/profile_state.dart';
+import 'package:demoz_client/auth/profile/bloc/profile_bloc.dart';
+import 'package:demoz_client/auth/profile/bloc/profile_event.dart';
+import 'package:demoz_client/auth/profile/bloc/profile_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

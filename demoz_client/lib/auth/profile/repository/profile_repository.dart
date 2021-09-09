@@ -1,4 +1,6 @@
-import 'package:demoz_client/profile/data_provider/profile_data.dart';
+
+
+import 'package:demoz_client/auth/profile/data_provider/profile_data.dart';
 
 class ProfileRepository {
   final ProfileDataProvider profileDataProvider;

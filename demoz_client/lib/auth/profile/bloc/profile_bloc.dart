@@ -1,7 +1,7 @@
 
-import 'package:demoz_client/profile/bloc/profile_event.dart';
-import 'package:demoz_client/profile/bloc/profile_state.dart';
-import 'package:demoz_client/profile/repository/profile_repository.dart';
+import 'package:demoz_client/auth/profile/bloc/profile_event.dart';
+import 'package:demoz_client/auth/profile/bloc/profile_state.dart';
+import 'package:demoz_client/auth/profile/repository/profile_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
