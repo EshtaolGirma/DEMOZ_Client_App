@@ -6,14 +6,13 @@ import 'package:demoz_client/auth/register/bloc/register_bloc.dart';
 import 'package:demoz_client/auth/register/data_provider/register_data.dart';
 import 'package:demoz_client/auth/register/repository/register_repository.dart';
 import 'package:demoz_client/auth/register/screens/registerScreen.dart';
-// import 'package:demoz_client/bills/bloc/bill_detail_bloc.dart';
-// import 'package:demoz_client/bills/bloc/bill_detail_state.dart';
-// import 'package:demoz_client/bills/bloc/bills_bloc.dart';
-// import 'package:demoz_client/bills/bloc/bills_state.dart';
-// import 'package:demoz_client/bills/data_provider/bills_data.dart';
-// import 'package:demoz_client/bills/repository/bills_repository.dart';
+import 'package:demoz_client/bills/bloc/bill_detail_bloc.dart';
+import 'package:demoz_client/bills/bloc/bill_detail_state.dart';
+import 'package:demoz_client/bills/bloc/bills_bloc.dart';
+import 'package:demoz_client/bills/bloc/bills_state.dart';
+import 'package:demoz_client/bills/data_provider/bills_data.dart';
+import 'package:demoz_client/bills/repository/bills_repository.dart';
 import 'package:demoz_client/expense/bloc/expense_bloc.dart';
-import 'package:demoz_client/expense/bloc/expense_detail_bloc.dart';
 import 'package:demoz_client/expense/data_provider/expense_data.dart';
 import 'package:demoz_client/expense/repository/expense_summery_repository.dart';
 import 'package:demoz_client/expense/screens/expense_summery_screen.dart';
@@ -37,7 +36,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
-// import 'bills/screens/bills_screen.dart';
+import 'bills/screens/bills_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -55,8 +54,8 @@ class MyApp extends StatelessWidget {
   final SavingRepository savingRepository = SavingRepository(
       savingDataProvider: SavingDataProvider(httpClient: http.Client()));
 
-  // final BillsRepository billsRepository = BillsRepository(
-  //     billsDataProvider: BillsDataProvider(httpClient: http.Client()));
+  final BillsRepository billsRepository = BillsRepository(
+      billsDataProvider: BillsDataProvider(httpClient: http.Client()));
   // final LoansRepository loansRepository = LoansRepository(
   //     loansDataProvider: LoansDataProvider(httpClient: http.Client()));
   @override
@@ -83,14 +82,14 @@ class MyApp extends StatelessWidget {
         BlocProvider(
             create: (cxt) =>
                 SavingDetailBloc(SavingDetailUnloaded(), savingRepository)),
-        // BlocProvider(
-        //     create: (cxt) => BillsBloc(BillsUnloaded(), billsRepository)),
-        // BlocProvider(
-        //     create: (cxt) =>
-        //         BillDetailBloc(BillDetailUnloaded(), billsRepository)),
-        // BlocProvider(
-        //     create: (cxt) =>
-        //         BillCreationBloc(BillFormEmpty(), billsRepository)),
+        BlocProvider(
+            create: (cxt) => BillsBloc(BillsUnloaded(), billsRepository)),
+        BlocProvider(
+            create: (cxt) =>
+                BillDetailBloc(BillDetailUnloaded(), billsRepository)),
+        BlocProvider(
+            create: (cxt) =>
+                BillCreationBloc(BillFormEmpty(), billsRepository)),
         // BlocProvider(
         //     create: (cxt) => LoansBloc(LoansUnloaded(), loansRepository)),
         // BlocProvider(
@@ -109,7 +108,7 @@ class MyApp extends StatelessWidget {
           '/register': (context) => RegisterScreen(),
           '/expense': (context) => ExpenseSummeryScreen(),
           '/saving': (context) => SavingScreen(),
-          // '/bills': (context) => BillsScreen(),
+          '/bills': (context) => BillsScreen(),
           // '/category': (context) => CategoryScreen(),
           // '/loans': (context) => LoansScreen(),
           // '/transaction_form': (context) => TransactionFormScreen(),
