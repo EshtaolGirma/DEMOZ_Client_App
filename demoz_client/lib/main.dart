@@ -13,16 +13,17 @@ import 'package:demoz_client/bills/bloc/bills_state.dart';
 import 'package:demoz_client/bills/data_provider/bills_data.dart';
 import 'package:demoz_client/bills/repository/bills_repository.dart';
 import 'package:demoz_client/expense/bloc/expense_bloc.dart';
+import 'package:demoz_client/expense/bloc/expense_detail_bloc.dart';
 import 'package:demoz_client/expense/data_provider/expense_data.dart';
 import 'package:demoz_client/expense/repository/expense_summery_repository.dart';
 import 'package:demoz_client/expense/screens/expense_summery_screen.dart';
-// import 'package:demoz_client/loans/bloc/loans_bloc.dart';
-// import 'package:demoz_client/loans/bloc/loans_detail_bloc.dart';
-// import 'package:demoz_client/loans/bloc/loans_detail_state.dart';
-// import 'package:demoz_client/loans/bloc/loans_state.dart';
-// import 'package:demoz_client/loans/data_provider/loans_data.dart';
-// import 'package:demoz_client/loans/repository/loans_repository.dart';
-// import 'package:demoz_client/loans/screens/loans_screen.dart';
+import 'package:demoz_client/loans/bloc/loans_bloc.dart';
+import 'package:demoz_client/loans/bloc/loans_detail_bloc.dart';
+import 'package:demoz_client/loans/bloc/loans_detail_state.dart';
+import 'package:demoz_client/loans/bloc/loans_state.dart';
+import 'package:demoz_client/loans/data_provider/loans_data.dart';
+import 'package:demoz_client/loans/repository/loans_repository.dart';
+import 'package:demoz_client/loans/screens/loans_screen.dart';
 import 'package:demoz_client/saving/bloc/saving_bloc.dart';
 import 'package:demoz_client/saving/bloc/saving_detail_bloc.dart';
 import 'package:demoz_client/saving/bloc/saving_detail_state.dart';
@@ -56,8 +57,8 @@ class MyApp extends StatelessWidget {
 
   final BillsRepository billsRepository = BillsRepository(
       billsDataProvider: BillsDataProvider(httpClient: http.Client()));
-  // final LoansRepository loansRepository = LoansRepository(
-  //     loansDataProvider: LoansDataProvider(httpClient: http.Client()));
+  final LoansRepository loansRepository = LoansRepository(
+      loansDataProvider: LoansDataProvider(httpClient: http.Client()));
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -70,7 +71,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (cxt) => ExpenseBloc(expenseRepository: expenseRepository),
         ),
-        // BlocProvider(create: (cxt) => ExpenseDetailBloc(expenseRepository)),
         BlocProvider(
             create: (cxt) =>
                 ExpenseCategoryBloc(expenseRepository: expenseRepository)),
@@ -90,18 +90,18 @@ class MyApp extends StatelessWidget {
         BlocProvider(
             create: (cxt) =>
                 BillCreationBloc(BillFormEmpty(), billsRepository)),
-        // BlocProvider(
-        //     create: (cxt) => LoansBloc(LoansUnloaded(), loansRepository)),
-        // BlocProvider(
-        //     create: (cxt) =>
-        //         LoanCreationBloc(LoansFormEmpty(), loansRepository)),
-        // BlocProvider(
-        //     create: (cxt) =>
-        //         LoanDetailBloc(LoanDetailUnloaded(), loansRepository))
+        BlocProvider(
+            create: (cxt) => LoansBloc(LoansUnloaded(), loansRepository)),
+        BlocProvider(
+            create: (cxt) =>
+                LoanCreationBloc(LoansFormEmpty(), loansRepository)),
+        BlocProvider(
+            create: (cxt) =>
+                LoanDetailBloc(LoanDetailUnloaded(), loansRepository))
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/loans',
+        initialRoute: '/login',
         theme: new ThemeData(scaffoldBackgroundColor: const Color(0xff66ffc7)),
         routes: {
           '/login': (context) => LoginScreen(),
@@ -110,7 +110,7 @@ class MyApp extends StatelessWidget {
           '/saving': (context) => SavingScreen(),
           '/bills': (context) => BillsScreen(),
           // '/category': (context) => CategoryScreen(),
-          // '/loans': (context) => LoansScreen(),
+          '/loans': (context) => LoansScreen(),
           // '/transaction_form': (context) => TransactionFormScreen(),
         },
       ),

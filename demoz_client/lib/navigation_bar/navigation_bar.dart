@@ -1,3 +1,8 @@
+import 'package:demoz_client/bills/screens/bills_screen.dart';
+import 'package:demoz_client/expense/screens/expense_summery_screen.dart';
+import 'package:demoz_client/loans/screens/loans_screen.dart';
+import 'package:demoz_client/saving/screens/saving_screen.dart';
+// import 'package:demoz_client/transaction/screens/category_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -8,7 +13,6 @@ class CustomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0.0,
-      // bottomBar,
       backgroundColor: Color.fromRGBO(117, 243, 197, 1),
       title: Padding(
         padding: const EdgeInsets.fromLTRB(0, 10, 00, 0),
@@ -75,7 +79,7 @@ class CustomFooterBar extends StatelessWidget {
           IconButton(
             icon: FaIcon(FontAwesomeIcons.wallet),
             onPressed: () {
-              print("Pressed");
+              Navigator.of(context).pushNamed(ExpenseSummeryScreen.routeName);
             },
           ),
           IconButton(
@@ -83,28 +87,28 @@ class CustomFooterBar extends StatelessWidget {
               FontAwesomeIcons.piggyBank,
             ),
             onPressed: () {
-              print("Pressed");
+              Navigator.of(context).pushNamed(SavingScreen.routeName);
             },
           ),
-          IconButton(
-            icon: FaIcon(
-              FontAwesomeIcons.plusSquare,
-              size: 35,
-            ),
-            onPressed: () {
-              print("Pressed");
-            },
-          ),
+          // IconButton(
+          //   icon: FaIcon(
+          //     FontAwesomeIcons.plusSquare,
+          //     size: 35,
+          //   ),
+          //   onPressed: () {
+          //     Navigator.of(context).pushNamed(CategoryScreen.routeName);
+          //   },
+          // ),
           IconButton(
             icon: FaIcon(FontAwesomeIcons.commentsDollar),
             onPressed: () {
-              print("Pressed");
+              Navigator.of(context).pushNamed(LoansScreen.routeName);
             },
           ),
           IconButton(
             icon: FaIcon(FontAwesomeIcons.fileInvoiceDollar),
             onPressed: () {
-              print("Pressed");
+              Navigator.of(context).pushNamed(BillsScreen.routeName);
             },
           ),
         ],
