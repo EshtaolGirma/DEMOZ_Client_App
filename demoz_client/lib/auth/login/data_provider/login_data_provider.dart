@@ -17,7 +17,6 @@ class LoginDataProvider {
         await httpClient.post(Uri.parse("$_baseUrl/login/$email/$pass/"));
 
     if (response.statusCode == 200) {
-      // final savingPlans = jsonDecode(response.body);
       final session = response.headers;
       final _prefs = sharedPreference();
       header_i = session['set-cookie'];
@@ -38,7 +37,6 @@ class LoginDataProvider {
   }
 
   Future<String> logoutRoute() async {
-    // print(header_i);
     final _prefs = sharedPreference();
     final result = await _prefs.getsession();
     final response = await httpClient

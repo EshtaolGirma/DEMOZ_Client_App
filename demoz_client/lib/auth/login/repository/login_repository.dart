@@ -1,4 +1,3 @@
-
 import 'package:demoz_client/auth/login/data_provider/login_data_provider.dart';
 
 class LoginRepository {
@@ -8,9 +7,5 @@ class LoginRepository {
 
   Future<String> loginRoute(String email, String pass) async {
     return await loginDataProvider.loginRoute(email, pass);
-
-  }
-  Future<String> logoutRoute() async{
-    return await loginDataProvider.logoutRoute();
   }
 }

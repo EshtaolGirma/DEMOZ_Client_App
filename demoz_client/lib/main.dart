@@ -5,6 +5,7 @@ import 'package:demoz_client/auth/login/screens/loginScreen.dart';
 import 'package:demoz_client/auth/profile/bloc/profile_bloc.dart';
 import 'package:demoz_client/auth/profile/data_provider/profile_data.dart';
 import 'package:demoz_client/auth/profile/repository/profile_repository.dart';
+import 'package:demoz_client/auth/profile/screens/profile.dart';
 import 'package:demoz_client/auth/register/bloc/bloc.dart';
 import 'package:demoz_client/auth/register/data_provider/register_data.dart';
 import 'package:demoz_client/auth/register/repository/register_repository.dart';
@@ -30,6 +31,7 @@ import 'package:demoz_client/transaction/bloc/transaction_bloc.dart';
 import 'package:demoz_client/transaction/bloc/transaction_form_bloc.dart';
 import 'package:demoz_client/transaction/date_provider/transaction_data.dart';
 import 'package:demoz_client/transaction/repository/transaction_repository.dart';
+import 'package:demoz_client/transaction/screens/category_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
@@ -122,9 +124,10 @@ class MyApp extends StatelessWidget {
           '/expense': (context) => ExpenseSummeryScreen(),
           '/saving': (context) => SavingScreen(),
           '/bills': (context) => BillsScreen(),
-          // '/category': (context) => CategoryScreen(),
+          '/category': (context) => CategoryScreen(),
           '/loans': (context) => LoansScreen(),
           // '/transaction_form': (context) => TransactionFormScreen(),
+          '/profile': (context) => ProfileScreen(),
         },
       ),
     );

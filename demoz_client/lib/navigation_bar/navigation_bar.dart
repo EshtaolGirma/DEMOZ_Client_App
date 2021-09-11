@@ -2,7 +2,7 @@ import 'package:demoz_client/bills/screens/bills_screen.dart';
 import 'package:demoz_client/expense/screens/expense_summery_screen.dart';
 import 'package:demoz_client/loans/screens/loans_screen.dart';
 import 'package:demoz_client/saving/screens/saving_screen.dart';
-// import 'package:demoz_client/transaction/screens/category_screen.dart';
+import 'package:demoz_client/transaction/screens/category_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -90,15 +90,15 @@ class CustomFooterBar extends StatelessWidget {
               Navigator.of(context).pushNamed(SavingScreen.routeName);
             },
           ),
-          // IconButton(
-          //   icon: FaIcon(
-          //     FontAwesomeIcons.plusSquare,
-          //     size: 35,
-          //   ),
-          //   onPressed: () {
-          //     Navigator.of(context).pushNamed(CategoryScreen.routeName);
-          //   },
-          // ),
+          IconButton(
+            icon: FaIcon(
+              FontAwesomeIcons.plusSquare,
+              size: 35,
+            ),
+            onPressed: () {
+              Navigator.of(context).pushNamed(CategoryScreen.routeName);
+            },
+          ),
           IconButton(
             icon: FaIcon(FontAwesomeIcons.commentsDollar),
             onPressed: () {

@@ -1,17 +1,22 @@
 import 'dart:convert';
 
 import 'package:demoz_client/saving/models/saving_model.dart';
+import 'package:demoz_client/sharedPreferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class SavingDataProvider {
   final _baseUrl = 'http://127.0.0.1:8000/saving';
   final http.Client httpClient;
-
+  final _prefs = sharedPreference();
   SavingDataProvider({required this.httpClient});
 
   Future<List> getSavingPlan() async {
-    final response = await httpClient.get(Uri.parse("$_baseUrl/plans/"));
+    final result = await _prefs.getsession();
+    final response = await httpClient.get(
+      Uri.parse("$_baseUrl/plans/"),
+      headers: {'cookie': '$result'},
+    );
 
     if (response.statusCode == 200) {
       final savingPlans = jsonDecode(response.body);
@@ -24,7 +29,11 @@ class SavingDataProvider {
   }
 
   Future<List> getSavingPlanDetails(int id) async {
-    final response = await httpClient.get(Uri.parse("$_baseUrl/plan/$id/"));
+    final result = await _prefs.getsession();
+    final response = await httpClient.get(
+      Uri.parse("$_baseUrl/plan/$id/"),
+      headers: {'cookie': '$result'},
+    );
     if (response.statusCode == 200) {
       final savingPlans = jsonDecode(response.body);
       return savingPlans['Plan']
@@ -37,6 +46,7 @@ class SavingDataProvider {
   }
 
   Future<List> updateSavingPlan(int id, SavingDetailModel save) async {
+    final result = await _prefs.getsession();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String formatted1 = formatter.format(save.startDate);
     final String formatted2 = formatter.format(save.endDate);
@@ -44,6 +54,7 @@ class SavingDataProvider {
       Uri.parse('$_baseUrl/plan/$id/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'cookie': '$result'
       },
       body: jsonEncode(<String, dynamic>{
         "saving_goal": save.goal,
@@ -69,6 +80,7 @@ class SavingDataProvider {
   }
 
   Future<List> createSavingPlan(SavingDetailModel save) async {
+    final result = await _prefs.getsession();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String formatted1 = formatter.format(save.startDate);
     final String formatted2 = formatter.format(save.endDate);
@@ -76,6 +88,7 @@ class SavingDataProvider {
       Uri.parse('$_baseUrl/plans/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'cookie': '$result'
       },
       body: jsonEncode(<String, dynamic>{
         "saving_goal": save.goal,
@@ -98,6 +111,7 @@ class SavingDataProvider {
   }
 
   Future<String> createDeposit(int id, SavingDepositModel depo) async {
+    final result = await _prefs.getsession();
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String date = formatter.format(depo.deposit_day);
 
@@ -105,6 +119,7 @@ class SavingDataProvider {
       Uri.parse('$_baseUrl/transaction/$id/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'cookie': '$result'
       },
       body: jsonEncode(<String, dynamic>{
         "deposited_amount": depo.amount,
