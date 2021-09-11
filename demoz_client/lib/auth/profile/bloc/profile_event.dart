@@ -15,8 +15,20 @@ class LoadedEvent extends ProfileEvent {
       required this.income});
 }
 
-class LoadProfileEvent extends ProfileEvent {
-  final String email;
+class LoadProfileEvent extends ProfileEvent {}
 
-  LoadProfileEvent({required this.email});
+class EditProfile extends ProfileEvent {}
+
+class SaveProfile extends ProfileEvent {
+  final String full_name;
+  final String pass;
+
+  SaveProfile({
+    required this.full_name,
+    required this.pass,
+  });
 }
+
+class LoggingOut extends ProfileEvent{}
+
+class DeletingAccount extends ProfileEvent{}

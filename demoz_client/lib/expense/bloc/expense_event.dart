@@ -15,7 +15,8 @@ class ExpenseDetailLoad extends ExpenseCategoryDetailEvent {
 }
 
 class ExpenseDetailClick extends ExpenseCategoryDetailEvent {
-  final int expense;
+  final int expense_id;
+  final String expense_cat;
 
-  ExpenseDetailClick(this.expense);
+  ExpenseDetailClick(this.expense_id, this.expense_cat);
 }

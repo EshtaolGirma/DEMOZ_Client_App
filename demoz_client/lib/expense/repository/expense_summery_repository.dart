@@ -16,4 +16,14 @@ class ExpenseRepository {
   Future<List> getExpense(int id) async {
     return await expenseDataProvider.getExpense(id);
   }
+
+  Future<List> getUserContact(int id) async {
+    return await expenseDataProvider.getUserContact(id);
+  }
+
+  Future<List> updateExpenseDetail(int id, double amount, DateTime date,
+      String description, String accomplice) async {
+    return await expenseDataProvider.updateExpenseDetail(
+        id, amount, date, description, accomplice);
+  }
 }

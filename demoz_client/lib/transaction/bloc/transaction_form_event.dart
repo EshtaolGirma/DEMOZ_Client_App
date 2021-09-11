@@ -1,12 +1,12 @@
-abstract class ExpenseDetailEvent {}
+abstract class TransactionDetailEvent {}
 
-class DetailEdit extends ExpenseDetailEvent {
+class DetailEdit extends TransactionDetailEvent {
   final int id;
 
   DetailEdit(this.id);
 }
 
-class DetailSave extends ExpenseDetailEvent {
+class DetailSave extends TransactionDetailEvent {
   final int id;
   final double amount;
   final DateTime date;
@@ -17,13 +17,13 @@ class DetailSave extends ExpenseDetailEvent {
       this.amount, this.date, this.description, this.accomplice, this.id);
 }
 
-class DetailCancle extends ExpenseDetailEvent {
+class DetailCancle extends TransactionDetailEvent {
   final int id;
 
   DetailCancle(this.id);
 }
 
-class DetailLoad extends ExpenseDetailEvent {
+class DetailLoad extends TransactionDetailEvent {
   final int id;
 
   DetailLoad(this.id);

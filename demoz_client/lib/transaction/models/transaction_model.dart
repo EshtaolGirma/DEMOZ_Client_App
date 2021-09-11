@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 @immutable
-class ExpenseCategorySummery extends Equatable {
-  ExpenseCategorySummery({
+class CategorySummery extends Equatable {
+  CategorySummery({
     required this.category,
     required this.total,
     required this.budget,
@@ -21,8 +21,8 @@ class ExpenseCategorySummery extends Equatable {
         budget,
       ];
 
-  factory ExpenseCategorySummery.fromJson(Map<String, dynamic> json) {
-    return ExpenseCategorySummery(
+  factory CategorySummery.fromJson(Map<String, dynamic> json) {
+    return CategorySummery(
       category: json['category'],
       total: json['total'].toDouble(),
       budget: json['budget'] != null ? json['budget'] : 0,
@@ -30,12 +30,12 @@ class ExpenseCategorySummery extends Equatable {
   }
 
   @override
-  String toString() => '$category, $total, $budget';
+  String toString() => '$category,  $total, $budget';
 }
 
 @immutable
-class ExpenseCategoryDetail extends Equatable {
-  ExpenseCategoryDetail({
+class TransactionCategoryDetail extends Equatable {
+  TransactionCategoryDetail({
     required this.id,
     required this.description,
     required this.amount,
@@ -58,9 +58,9 @@ class ExpenseCategoryDetail extends Equatable {
         accomplice,
       ];
 
-  factory ExpenseCategoryDetail.fromJson(Map<String, dynamic> json) {
+  factory TransactionCategoryDetail.fromJson(Map<String, dynamic> json) {
     DateFormat inputFormat = DateFormat('yyyy-MM-dd');
-    return ExpenseCategoryDetail(
+    return TransactionCategoryDetail(
         id: json['id'],
         amount: json['Amount'].toDouble(),
         description: json['Description'] != null ? json['Description'] : '...',

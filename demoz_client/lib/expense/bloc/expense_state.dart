@@ -36,8 +36,15 @@ class ExpenseDetailLoadFailed extends ExpenseCategoryDetailState {
   ExpenseDetailLoadFailed({required this.errorMsg});
 }
 
-class ExpenseDetailClicked extends ExpenseCategoryDetailState {
+class ExpenseDetailExpanded extends ExpenseCategoryDetailState {
   final List<dynamic> detail;
 
-  ExpenseDetailClicked(this.detail);
+  ExpenseDetailExpanded(this.detail);
+}
+
+class ExpenseDetailClicked extends ExpenseCategoryDetailState {
+  final int id;
+  final String expense_cat;
+
+  ExpenseDetailClicked(this.id, this.expense_cat);
 }

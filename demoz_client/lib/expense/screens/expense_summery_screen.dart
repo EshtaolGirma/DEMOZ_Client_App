@@ -1,8 +1,11 @@
 import 'package:demoz_client/expense/bloc/expense_bloc.dart';
 import 'package:demoz_client/expense/bloc/expense_event.dart';
 import 'package:demoz_client/expense/bloc/expense_state.dart';
+import 'package:demoz_client/expense/screens/expense_detail_screen.dart';
+import 'package:demoz_client/navigation_bar/navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ExpenseSummeryScreen extends StatelessWidget {
@@ -11,14 +14,18 @@ class ExpenseSummeryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _homepageBuild();
+    return _homepageBuilder();
   }
 }
 
-Widget _homepageBuild() {
+Widget _homepageBuilder() {
   return SafeArea(
     child: Scaffold(
       backgroundColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80.0), // here the desired height
+        child: CustomAppBar(),
+      ),
       body: SingleChildScrollView(
         child: Column(children: [
           _chartBuilder2(),
@@ -38,6 +45,7 @@ Widget _homepageBuild() {
           _expenseListBuilder(),
         ]),
       ),
+      bottomNavigationBar: CustomFooterBar(),
     ),
   );
 }
@@ -203,7 +211,6 @@ Widget _expenseCard(String categoryName, double expense, double budget) {
     height: 85,
     child: Card(
       elevation: 1,
-      // color: Color.fromRGBO(250, 250, 250, 0.75),
       shape: RoundedRectangleBorder(
         side: BorderSide(color: Color.fromRGBO(117, 243, 197, 1)),
         borderRadius: BorderRadius.circular(8.0),
@@ -238,9 +245,16 @@ Widget _wrapExpenseCardWithExpanstionTile(
     String categoryName, double expense, double budget, int id) {
   return BlocConsumer<ExpenseCategoryBloc, ExpenseCategoryDetailState>(
     listener: (context, state) {
-      // TODO: implement listener
       if (state is ExpenseDetailClicked) {
-        // Navigator.of(context).pushNamed('/expense_detial');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ExpenesDetailScreen(
+              expense_id: state.id,
+              cat_name: state.expense_cat,
+            ),
+          ),
+        );
       }
     },
     builder: (context, state) {
@@ -257,7 +271,7 @@ Widget _wrapExpenseCardWithExpanstionTile(
             );
           }),
           children: _expenseCategoryDetail(
-              state.expenseDetailList, expenseDetailBloc),
+              state.expenseDetailList, expenseDetailBloc, categoryName),
           onExpansionChanged: (bool) {
             if (bool == true) {
               expenseDetailBloc.add(ExpenseDetailLoad(id + 1, categoryName));
@@ -275,7 +289,6 @@ Widget _wrapExpenseCardWithExpanstionTile(
             child: _expenseCard(categoryName, expense, budget),
           );
         }),
-        // children: _expenseCategoryDetail([]),
         onExpansionChanged: (bool) {
           if (bool == true) {
             expenseDetailBloc.add(ExpenseDetailLoad(id + 1, categoryName));
@@ -303,8 +316,11 @@ Widget _buildExpenseSummeryList(List<dynamic> expenseSummery) {
   );
 }
 
-List<Widget> _expenseCategoryDetail(List detail, ExpenseCategoryBloc bloc) {
-  Widget expenseDetail(String date, double aoumnt, int id) {
+List<Widget> _expenseCategoryDetail(
+    List detail, ExpenseCategoryBloc bloc, String cat) {
+  Widget expenseDetail(DateTime date, double aoumnt, int id) {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formatted = formatter.format(date);
     return InkWell(
       child: Container(
         margin: const EdgeInsets.only(
@@ -323,7 +339,7 @@ List<Widget> _expenseCategoryDetail(List detail, ExpenseCategoryBloc bloc) {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "$date",
+                "$formatted",
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 20.0,
@@ -341,7 +357,7 @@ List<Widget> _expenseCategoryDetail(List detail, ExpenseCategoryBloc bloc) {
         ),
       ),
       onTap: () {
-        bloc.add(ExpenseDetailClick(id));
+        bloc.add(ExpenseDetailClick(id, cat));
       },
     );
   }

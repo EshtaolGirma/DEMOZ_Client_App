@@ -2,10 +2,16 @@ abstract class ProfileState {}
 
 class LoadingProfile extends ProfileState {}
 
-class LoadedState extends ProfileState {
-  final String fullname;
+class EditinState extends ProfileState {
+  final List user;
 
-  LoadedState({required this.fullname});
+  EditinState({required this.user});
+}
+
+class LoadedState extends ProfileState {
+  final List user;
+
+  LoadedState({required this.user});
 }
 
 class LoadFailed extends ProfileState {
@@ -13,3 +19,7 @@ class LoadFailed extends ProfileState {
 
   LoadFailed({required this.errorMsg});
 }
+
+class LoggedOut extends ProfileState {}
+
+class DeteledAccount extends ProfileState {}

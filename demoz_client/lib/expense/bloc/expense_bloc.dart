@@ -10,14 +10,11 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
       : assert(expenseRepository != null),
         super(ExpenseUnloaded());
 
-  // ExpenseBloc(ExpenseState initialState) : super(ExpenseUnloaded());
-
   @override
   Stream<ExpenseState> mapEventToState(ExpenseEvent event) async* {
     if (state is ExpenseUnloaded) {
       try {
         yield ExpenseLoading();
-        // await Future.delayed(Duration(seconds: 2));
         final expenses = await expenseRepository.getCategorySummery();
 
         yield ExpenseLoaded(expenses);
@@ -33,8 +30,7 @@ class ExpenseCategoryBloc
   final ExpenseRepository expenseRepository;
 
   ExpenseCategoryBloc({required this.expenseRepository})
-      : assert(expenseRepository != null),
-        super(ExpenseDetailUnloaded());
+      : super(ExpenseDetailUnloaded());
 
   @override
   Stream<ExpenseCategoryDetailState> mapEventToState(
@@ -45,20 +41,13 @@ class ExpenseCategoryBloc
             event.category_id, event.name);
 
         yield ExpenseDetailLoaded(expensesDetail);
-        // print(event.category);
-        // print(expensesDetail);
       } catch (_) {
         print(_);
       }
     }
 
     if (event is ExpenseDetailClick) {
-      final expensesDetail = await expenseRepository.getExpense(event.expense);
-      print(expensesDetail);
-      yield ExpenseDetailClicked(expensesDetail);
+      yield ExpenseDetailClicked(event.expense_id, event.expense_cat);
     }
   }
-
-  // ExpenseBloc(ExpenseState initialState) : super(ExpenseUnloaded());
-
 }
